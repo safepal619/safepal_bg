@@ -95,7 +95,7 @@ mongoose
     const io = socket(server, {
         cors: {
             // origin: `http://localhost:${PORT}`,
-            origin: `http://localhost:5173`,
+            origin: process.env.HOST_URL_FRONTEND,
             credentials: true
         }
     });
