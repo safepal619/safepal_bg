@@ -10,7 +10,10 @@ const allowedOrigins = [
     'http://127.0.0.1:3000',
     'https://safepal-bg.onrender.com/', //front-end website
     'https://safepal-bg.onrender.com/', //front-end website
-
+    "https://safepal.onrender.com/",
+    "https://safepal.onrender.com",
+    "http://safepal.onrender.com/",
+    "http://safepal.onrender.com"
 ]
 
 
