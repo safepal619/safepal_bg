@@ -1,4 +1,4 @@
-const { validationResult } = require("express-validator");
+// const { validationResult } = require("express-validator");
 const User = require("../../model/user");
 const { errorHandler } = require("../../utils/error");
 
@@ -18,22 +18,22 @@ module.exports = async (req, res, next) => {
         kycback
   } = req.body
 
-  if (userId !== req?.user?.userId) next(errorHandler(403, "route forbidden"));
+  // if (userId !== req?.user?.userId) next(errorHandler(403, "route forbidden"));
 
-  const errors = validationResult(req);
+  // const errors = validationResult(req);
 
  
 
   try {
-    if (!errors.isEmpty()) {
-      const validationErrors = errors.array()[0].msg;
+    // if (!errors.isEmpty()) {
+    //   const validationErrors = errors.array()[0].msg;
 
-      return res.status(400).json({
-        success: false,
-        message: "Validation errors",
-        error: validationErrors,
-      });
-    }
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Validation errors",
+    //     error: validationErrors,
+    //   });
+    // }
 
     const user = await User.findByIdAndUpdate(userId, {
         avatar,
@@ -47,6 +47,10 @@ module.exports = async (req, res, next) => {
         kycfront,  
         kycback
     })
+
+    if(!user) {
+      return next(errorHandler(400, "update fail"));
+    }
 
   
     return res.json({ message: "Profile updated successfully" });

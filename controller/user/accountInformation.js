@@ -7,9 +7,9 @@ module.exports = async (req, res, next) => {
   const { userId } = req.params;
 
 
-  if (userId !== req?.user?.userId) next(errorHandler(403, "route forbidden"));
+  // if (userId !== req?.user?.userId) next(errorHandler(403, "route forbidden"));
 
-  const errors = validationResult(req);
+  // const errors = validationResult(req);
 
 
   // const cryptoApiHeader={
@@ -39,17 +39,17 @@ module.exports = async (req, res, next) => {
 
 
   try {
-    if (!errors.isEmpty()) {
-      const validationErrors = errors.array()[0].msg;
+    // if (!errors.isEmpty()) {
+    //   const validationErrors = errors.array()[0].msg;
 
-      return res.status(400).json({
-        success: false,
-        message: "Validation errors",
-        error: validationErrors,
-      });
-    }
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Validation errors",
+    //     error: validationErrors,
+    //   });
+    // }
 
-    const user = await User.findById(userId).select("-password")
+    const user = await User.findById(userId);
 
     const btcBalance = user.wallet.Bitcoin.fiatbalance;
     const ethBalance = user.wallet.Ethereum.fiatbalance;

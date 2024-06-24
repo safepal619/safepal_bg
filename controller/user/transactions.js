@@ -1,4 +1,5 @@
 const UserTransactions = require("../../model/transaction");
+const Notification = require("../../model/notification");
 const { validationResult } = require("express-validator");
 // const User = require("../../model/user");
 const { errorHandler } = require("../../utils/error");
@@ -26,6 +27,8 @@ module.exports = async (req, res, next) => {
     const data = await UserTransactions.create({walletname, amount, isDeposit, sender: userId, walletId, transactionProof, logo, withdrawWalletAddress})
 
     if(data) {
+
+      await Notification.create({user:userId, message: isDeposit ? "make a deposit" : "request for a withdrawal" })
       return res.json({ message: "Transaction save successfully " });
     } else {
       return next(errorHandler(403, "could not save try again later."));

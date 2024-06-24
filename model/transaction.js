@@ -13,6 +13,10 @@ const transactionSchema = new Schema({
         type: Boolean,
         default: false
     },
+    status: {
+        type: String,
+        default: "Pending"
+    },
     walletname: String,
     walletId: String,
     logo: String,
