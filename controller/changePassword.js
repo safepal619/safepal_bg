@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const User = require("../model/user");
+const Notification = require("../model/notification");
 
 const bcrypt = require("bcryptjs");
 
@@ -54,7 +55,7 @@ exports.changePassword = async (req, res, next) => {
                 throw error
             }
 
-
+            await Notification.create({user:userId, message: "change password" })
             return res.status(200).json({
                 message: "Password has been updated successfully.",
                 status: "success",

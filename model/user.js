@@ -26,6 +26,14 @@ const userSchema = new Schema(
       type: String,
       default: "0X0000000",
     },
+    message_counter_admin: {
+      type: Number,
+      default: 0,
+    },
+    message_counter_user: {
+      type: Number,
+      default: 0,
+    },
     status: {
       type: String,
       default: "User",

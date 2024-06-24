@@ -3,43 +3,31 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const Authentication = require("./routes/authentication");
 const User = require("./routes/User");
+const Message = require("./routes/Message");
 const FilesData = require("./routes/FilesData");
-
+const RateLimit = require("express-rate-limit");
 
 const { config } = require("dotenv");
+const { corsConfigs } = require("./utils/corConfig");
 // const cookieParser = require("cookie-parser");
 const app = express();
-// const cors = require('cors')
-
-
-// const corsOptions = {
-//     origin: 'http://localhost:3000',
-//     allowedHeaders: {
-//         "Access-Control-Allow-Headers": ['Content-Type', 'Authorization']
-//     },
-//     // credentials: {
-//     //     "Access-Control-Allow-Credentials": true
-//     // }
-// }
-
-
-// app.use(cors(corsOptions))
+const cors = require('cors')
 
 
 config({ path: "./.env" });
 
+// const { Server } = require("socket.io");
+const socket = require("socket.io");
 
-// app.use(cookieParser());
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
-    res.setHeader(
-        "Access-Control-Allow-Headers",
-        "X-Requested-With, content-type, Authorization"
-    );
-    next();
-});
+const limiter = RateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 20,
+  });
+  // Apply rate limiter to all requests
+  app.use(limiter);
+
+app.use(cors(corsConfigs))
 
 const PORT = process.env.PORT || 5000;
 
@@ -57,17 +45,6 @@ const jsonParser = bodyParser.json();
 app.use(jsonParser);
 
 
-// Schedule the cron job to run every minute
-// cron.schedule('10 17 * * *', () => {
-
-// * * * * *
-// admin aproved user
-// isadminApproved()
-// console.log("cron")
-// });
-
-
-
 app.use("/api/auth", Authentication);
 
 
@@ -77,6 +54,8 @@ app.use("/api/auth", Authentication);
 app.use("/api/user", User)
 
 app.use("/api/file", FilesData)
+
+app.use("/api/message",Message)
 
 
 /**
@@ -101,14 +80,48 @@ mongoose
     })
     .then((response) => {
         if (response) {
-            app.listen(PORT, () => {
-                console.log(`Connected on PORT ${PORT} || ${currentUrl}`);
-            });
+        
         }
     })
     .catch((e) => {
         console.log(e);
     });
+
+    const server =   app.listen(PORT, () => {
+        console.log(`Connected on PORT ${PORT} || ${currentUrl}`);
+    });
+
+    // const io = new Server(server);
+    const io = socket(server, {
+        cors: {
+            // origin: `http://localhost:${PORT}`,
+            origin: `http://localhost:5173`,
+            credentials: true
+        }
+    });
+
+    global.onlineUsers = new Map()
+
+    io.on('connection', (socket) => {
+        global.chatSocket = socket;
+
+        socket.on("add-user", (userId) => {
+            // console.log("userid: ",userId)
+            onlineUsers.set(userId, socket.id)
+
+        })
+        socket.on("send-message", (data) => {
+            // console.log("data:", data)
+           const sendUserSocket = onlineUsers.get(data.to)
+
+           if(sendUserSocket){
+            socket.to(sendUserSocket).emit("message-received", data.message)
+           }
+
+        })
+
+
+    })
 
 // Export the Express API
 module.exports = app;

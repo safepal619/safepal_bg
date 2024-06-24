@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const ValidationUser = require("../model/verifyUser");
 const User = require("../model/user");
+const Notification = require("../model/notification");
 
 const { sendSignUpVerifyEmail } = require("../middleware/sendMail");
 const { errorHandler } = require("../utils/error");
@@ -42,7 +43,7 @@ exports.resignup = async (req, res, next) => {
 
 
         await ValidationUser.deleteOne({ userId })
-
+        await Notification.create({user:userResponse._id, message: "signup new account" })
         await sendSignUpVerifyEmail(userResponse, res, next, islogin = true)
 
 

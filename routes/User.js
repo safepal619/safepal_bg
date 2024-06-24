@@ -2,7 +2,12 @@ const express = require("express");
 const AccountInformation = require("../controller/user/accountInformation");
 
 const UserTransactions = require("../controller/user/transactions")
+const VerifyTransactions = require("../controller/user/verifyTransaction")
+const AllTransactions = require("../controller/user/alltransaction")
+const RejectTransactions = require("../controller/user/rejecttransaction")
 const ContactUs = require("../controller/user/contactUs")
+const AllUsers = require("../controller/user/alluser")
+const Notificaions = require("../controller/user/notification")
 const IndividualTransactions = require("../controller/user/individualtransaction")
 const UpdateProfile = require("../controller/user/updateuser")
 const UpdateBankDetail = require("../controller/user/bankdetail")
@@ -23,8 +28,8 @@ const route = express.Router();
 // user account information
 route.get(
   "/accountInformation/:userId",
-  verifyToken,
-  userDetailValidator,
+  // verifyToken,
+  // userDetailValidator,
   AccountInformation
 );
 
@@ -55,6 +60,25 @@ route.post(
   UserTransactions
 );
 
+// verify transaction
+route.patch(
+  "/verify-transaction",
+  VerifyTransactions
+);
+
+// verify transaction
+route.patch(
+  "/reject-transaction",
+  RejectTransactions
+);
+
+
+
+// get user transaction
+route.get(
+  "/transactions",
+  AllTransactions
+);
 // get user transaction
 route.get(
   "/transaction/user/:userId",
@@ -66,8 +90,8 @@ route.get(
 // user update profile
 route.patch(
   "/profile/update/:userId",
-  verifyToken,
-  userDetailValidator,
+  // verifyToken,
+  // userDetailValidator,
   UpdateProfile
 );
 
@@ -86,6 +110,31 @@ route.post(
   "/contact",
   ContactUs 
 );
+
+
+// allUser
+route.get(
+  "/allUser",
+  AllUsers 
+);
+// post contact-us
+route.get(
+  "/notifications",
+  Notificaions 
+);
+
+// post contact-us
+route.post(
+  "/create-notifications",
+  (req,res, next) => {
+req.body.isView = true
+next()
+  },
+  Notificaions 
+);
+
+
+
 
 
 

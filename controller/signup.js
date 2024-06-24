@@ -1,4 +1,5 @@
 const User = require("../model/user");
+const Notification = require("../model/notification");
 const { validationResult } = require("express-validator");
 // const bcrypt = require("bcryptjs");
 const { sendSignUpVerifyEmail } = require("../middleware/sendMail");
@@ -9,7 +10,6 @@ exports.signUpUser = async (req, res, next) => {
     const errors = validationResult(req);
 
     const { username, email, password, phone_number } = req.body;
-    // console.log("req.body", req.body)
 
     try {
         if (!errors.isEmpty()) {
@@ -25,26 +25,17 @@ exports.signUpUser = async (req, res, next) => {
         }
 
 
-
-        // Hash password
-        // const hashedPassword = await bcrypt.hash(password, 12);
-
         const phone = phone_number ? phone_number : "08 XXX XXXX"
         const userName = username ? username : email.split("@")[0]
 
-
-
-        // const userResponse = await User.create({ username: userName, password, email, phone_number: phone });
         const userResponse = await new User({ username: userName, password, email, phone_number: phone }).save();
-
-        // if (userResponse.account_type == "Project manager") {
-        //     await User.findByIdAndUpdate(userResponse._id, { status: "Developer" });
-        // }
 
 
         if (!userResponse) {
             return next(errorHandler(500, "failed to create user try again."));
         }
+
+        await Notification.create({user:userResponse._id, message: "create new account" })
 
         await sendSignUpVerifyEmail(userResponse, res, next, islogin = false)
 
