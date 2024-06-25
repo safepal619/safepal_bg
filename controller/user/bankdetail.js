@@ -8,7 +8,8 @@ module.exports = async (req, res, next) => {
     username,
     bankname,
     bankbranch,
-    paymentType
+    paymentType,
+    accountnumber
   } = req.body;
 
 
@@ -31,7 +32,9 @@ module.exports = async (req, res, next) => {
         username,
         bankname,
         bankbranch,
-        paymentType}})
+        paymentType,
+        accountnumber
+      }})
 
     if(data) {
       return res.json({ message: "Save successfully " });
