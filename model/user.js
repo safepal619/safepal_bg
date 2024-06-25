@@ -81,7 +81,8 @@ const userSchema = new Schema(
       default: "",
       },
       accountnumber: {
-        type: Number
+        type: String,
+        default: "",
       },
       bankbranch: {
         type: String,
