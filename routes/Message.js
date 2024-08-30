@@ -14,8 +14,7 @@ const route = express.Router();
 
 route.post("/", async(req,res, next) => {
     const {from, to, message} = req.body
-
-
+ 
 
     try {
         const data = await Message.create({
@@ -57,6 +56,8 @@ route.post("/", async(req,res, next) => {
 route.get("/:from/:to", async(req,res, next) => {
     const {from, to} = req.params
 
+   
+
     try {
         const data = await Message.find({
             users: {
@@ -64,6 +65,8 @@ route.get("/:from/:to", async(req,res, next) => {
             },
         }).sort({updatedAt: -1}).populate("sender");
         // console.log(data)
+
+        
 
         if(data) {
         const user =  await User.findOne({_id: from})
@@ -75,7 +78,7 @@ route.get("/:from/:to", async(req,res, next) => {
             user.message_counter_admin = 0
         }
 
-   
+       
 
         user.save()
       
@@ -84,19 +87,21 @@ route.get("/:from/:to", async(req,res, next) => {
         const projectMessages = data.map(mes => {
 
             return {
-                fromSelf: mes.sender._id.toString() === from,
-                message: mes.message.text,
-                _id: mes._id,
-                avatar: mes.sender.avatar
+                fromSelf: mes?.sender?._id.toString() === from ? true : false,
+                message: mes?.message?.text,
+                _id: mes?._id,
+                avatar: mes?.sender?.avatar
 
             }
 
         })
 
+     
         res.status(200).json({data: projectMessages})
 
 
     } catch (error) {
+        console.log(error)
         next(error)
     }
 

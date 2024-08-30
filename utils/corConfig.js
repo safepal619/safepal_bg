@@ -14,6 +14,7 @@ const allowedOrigins = [
     "https://safepal.onrender.com",
     "http://safepal.onrender.com/",
     "http://safepal.onrender.com"
+ 
 ]
 
 
