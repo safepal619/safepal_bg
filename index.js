@@ -16,7 +16,6 @@ const cors = require('cors')
 
 config({ path: "./.env" });
 
-// const { Server } = require("socket.io");
 // const socket = require("socket.io");
 
 
@@ -88,10 +87,8 @@ mongoose
     });
 
 app.listen(PORT, () => {
-        // console.log(`Connected on PORT ${PORT} || ${currentUrl}`);
+        console.log(`Connected on PORT ${PORT} || ${currentUrl}`);
     });
-
-
 
 
     // // const io = new Server(server);
