@@ -5,7 +5,7 @@ const Authentication = require("./routes/authentication");
 const User = require("./routes/User");
 const Message = require("./routes/Message");
 const FilesData = require("./routes/FilesData");
-const RateLimit = require("express-rate-limit");
+// const RateLimit = require("express-rate-limit");
 
 const { config } = require("dotenv");
 const { corsConfigs } = require("./utils/corConfig");
@@ -17,15 +17,15 @@ const cors = require('cors')
 config({ path: "./.env" });
 
 // const { Server } = require("socket.io");
-const socket = require("socket.io");
+// const socket = require("socket.io");
 
 
-const limiter = RateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: 20,
-  });
-  // Apply rate limiter to all requests
-  app.use(limiter);
+// const limiter = RateLimit({
+//     windowMs: 1 * 60 * 1000, // 1 minute
+//     max: 20,
+//   });
+//   // Apply rate limiter to all requests
+//   app.use(limiter);
 
 app.use(cors(corsConfigs))
 
