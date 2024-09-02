@@ -87,41 +87,44 @@ mongoose
         console.log(e);
     });
 
-    const server =   app.listen(PORT, () => {
-        console.log(`Connected on PORT ${PORT} || ${currentUrl}`);
+app.listen(PORT, () => {
+        // console.log(`Connected on PORT ${PORT} || ${currentUrl}`);
     });
 
-    // const io = new Server(server);
-    const io = socket(server, {
-        cors: {
-            // origin: `http://localhost:${PORT}`,
-            origin: process.env.HOST_URL_FRONTEND,
-            credentials: true
-        }
-    });
-
-    global.onlineUsers = new Map()
-
-    io.on('connection', (socket) => {
-        global.chatSocket = socket;
-
-        socket.on("add-user", (userId) => {
-            // console.log("userid: ",userId)
-            onlineUsers.set(userId, socket.id)
-
-        })
-        socket.on("send-message", (data) => {
-            // console.log("data:", data)
-           const sendUserSocket = onlineUsers.get(data.to)
-
-           if(sendUserSocket){
-            socket.to(sendUserSocket).emit("message-received", data.message)
-           }
-
-        })
 
 
-    })
+
+    // // const io = new Server(server);
+    // const io = socket(server, {
+    //     cors: {
+    //         // origin: `http://localhost:${PORT}`,
+    //         origin: process.env.HOST_URL_FRONTEND,
+    //         credentials: true
+    //     }
+    // });
+
+    // global.onlineUsers = new Map()
+
+    // io.on('connection', (socket) => {
+    //     global.chatSocket = socket;
+
+    //     socket.on("add-user", (userId) => {
+    //         // console.log("userid: ",userId)
+    //         onlineUsers.set(userId, socket.id)
+
+    //     })
+    //     socket.on("send-message", (data) => {
+    //         // console.log("data:", data)
+    //        const sendUserSocket = onlineUsers.get(data.to)
+
+    //        if(sendUserSocket){
+    //         socket.to(sendUserSocket).emit("message-received", data.message)
+    //        }
+
+    //     })
+
+
+    // })
 
 // Export the Express API
 module.exports = app;
