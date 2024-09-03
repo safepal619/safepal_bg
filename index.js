@@ -90,7 +90,6 @@ app.listen(PORT, () => {
         console.log(`Connected on PORT ${PORT} || ${currentUrl}`);
     });
 
-
     // // const io = new Server(server);
     // const io = socket(server, {
     //     cors: {
